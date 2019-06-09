@@ -1,0 +1,2122 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: bizmgt API
+  description: ビジネス管理 API
+
+servers:
+  - url: https://example.io/api/v1
+
+security:
+  - BasicAuth: []
+
+paths:
+  /users:
+    get:
+      tags:
+        - account
+      summary: ユーザー一覧
+      description: ユーザーを一覧で返却する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags:
+        - account
+      summary: ユーザー登録
+      description: ユーザーを登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                account:
+                  type: string
+                  title: アカウント
+                  example: 'taro.yamada@example.com'
+                name:
+                  type: string
+                  title: ユーザー名
+                  example: 'Taro Yamada'
+                password:
+                  type: string
+                  title: パスワード
+                  format: password
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      tags:
+        - account
+      summary: ユーザー取得
+      description: 指定したIDでユーザーを取得する
+      parameters:
+        - name: id
+          in: path
+          description: ユーザーID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    patch:
+      tags:
+        - account
+      summary: ユーザー更新
+      description: 指定したIDでユーザーを更新する
+      parameters:
+        - name: id
+          in: path
+          description: ユーザーID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  title: ユーザー名
+                  example: 'Taro Yamada'
+                password:
+                  type: string
+                  title: パスワード
+                  format: password
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags:
+        - account
+      summary: ユーザー削除
+      description: 指定したIDでユーザーを削除する
+      parameters:
+        - name: id
+          in: path
+          description: ユーザーID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /inquiries:
+    get:
+      tags:
+        - counting
+      summary: 引合一覧
+      description: 引合を一覧で返却する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Inquiry'
+    post:
+      tags:
+        - counting
+      summary: 引合登録
+      description: 引合を登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプルプロジェクト'
+                customer_id:
+                  type: integer
+                  title: 顧客ID
+                  format: int64
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inquiry'
+  /inquiries/{id}:
+    get:
+      tags:
+        - counting
+      summary: 引合取得
+      description: 指定したIDで引合を取得する
+      parameters:
+        - name: id
+          in: path
+          description: 引合ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inquiry'
+    patch:
+      tags:
+        - counting
+      summary: 引合更新
+      description: 指定したIDで引合を更新する
+      parameters:
+        - name: id
+          in: path
+          description: 引合ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプルプロジェクト'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inquiry'
+    delete:
+      tags:
+        - counting
+      summary: 引合削除
+      description: 指定したIDで引合を削除する
+      parameters:
+        - name: id
+          in: path
+          description: 引合ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /estimates:
+    get:
+      tags:
+        - counting
+      summary: 見積一覧
+      description: 見積を一覧で返却する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Estimate'
+    post:
+      tags:
+        - counting
+      summary: 見積登録
+      description: 見積を登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプルプロジェクト'
+                amount:
+                  type: integer
+                  title: 見積金額
+                  format: int64
+                customer_id:
+                  type: integer
+                  title: 顧客ID
+                  format: int64
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estimate'
+  /estimates/{id}:
+    get:
+      tags:
+        - counting
+      summary: 見積取得
+      description: 指定したIDで見積を取得する
+      parameters:
+        - name: id
+          in: path
+          description: 見積ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estimate'
+    patch:
+      tags:
+        - counting
+      summary: 見積更新
+      description: 指定したIDで見積を更新する
+      parameters:
+        - name: id
+          in: path
+          description: 見積ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプルプロジェクト'
+                amount:
+                  type: integer
+                  title: 見積金額
+                  format: int64
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Estimate'
+    delete:
+      tags:
+        - counting
+      summary: 見積削除
+      description: 指定したIDで見積を削除する
+      parameters:
+        - name: id
+          in: path
+          description: 見積ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /orders:
+    get:
+      tags:
+        - counting
+      summary: 注文一覧
+      description: 注文を一覧で返却する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      tags:
+        - counting
+      summary: 注文登録
+      description: 注文を登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプル説明'
+                code:
+                  type: string
+                  title: 受注コード
+                  example: 'XXXXXXXXXX'
+                placingOrderCode:
+                  type: string
+                  title: 発注コード
+                  example: 'XXXXXXXXXX'
+                planedAmount:
+                  type: integer
+                  title: 受注金額（計画）
+                  example: 100000
+                actualAmount:
+                  type: integer
+                  title: 受注金額（実績）
+                  example: 100000
+                planedDate:
+                  type: string
+                  title: 受注日（計画）
+                  format: date
+                actualDate:
+                  type: string
+                  title: 受注日（実績）
+                  format: date
+                estimateId:
+                  type: integer
+                  title: 見積ID
+                  format: int64
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /orders/{id}:
+    get:
+      tags:
+        - counting
+      summary: 注文取得
+      description: 指定したIDで注文を取得する
+      parameters:
+        - name: id
+          in: path
+          description: 注文ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    patch:
+      tags:
+        - counting
+      summary: 注文更新
+      description: 指定したIDで注文を更新する
+      parameters:
+        - name: id
+          in: path
+          description: 注文ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプル説明'
+                code:
+                  type: string
+                  title: 受注コード
+                  example: 'XXXXXXXXXX'
+                placingOrderCode:
+                  type: string
+                  title: 発注コード
+                  example: 'XXXXXXXXXX'
+                planedAmount:
+                  type: integer
+                  title: 受注金額（計画）
+                  example: 100000
+                actualAmount:
+                  type: integer
+                  title: 受注金額（実績）
+                  example: 100000
+                planedDate:
+                  type: string
+                  title: 受注日（計画）
+                  format: date
+                actualDate:
+                  type: string
+                  title: 受注日（実績）
+                  format: date
+                estimateId:
+                  type: integer
+                  title: 見積ID
+                  format: int64
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    delete:
+      tags:
+        - counting
+      summary: 注文削除
+      description: 指定したIDで注文を削除する
+      parameters:
+        - name: id
+          in: path
+          description: 注文ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /inquiries/{id}/detail:
+    get:
+      tags:
+        - counting
+      summary: 引合詳細一覧
+      description: 引合詳細を一覧で返却する
+      parameters:
+        - name: id
+          in: path
+          description: 引合ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InquiryDetail'
+    post:
+      tags:
+        - counting
+      summary: 引合詳細登録
+      description: 引合詳細を登録する
+      parameters:
+        - name: id
+          in: path
+          description: 引合ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                comment:
+                  type: string
+                  title: コメント
+                  example: 'サンプルコメント'
+                inquiryId:
+                  type: integer
+                  title: 引合ID
+                  format: int64
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InquiryDetail'
+  /inquiries/{id}/detail/{detailId}:
+    get:
+      tags:
+        - counting
+      summary: 引合詳細取得
+      description: 指定したIDで引合詳細を取得する
+      parameters:
+        - name: id
+          in: path
+          description: 引合ID
+          required: true
+          schema:
+            type: integer
+        - name: detailId
+          in: path
+          description: 引合詳細ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InquiryDetail'
+    patch:
+      tags:
+        - counting
+      summary: 引合詳細更新
+      description: 指定したIDで引合詳細を更新する
+      parameters:
+        - name: id
+          in: path
+          description: 引合ID
+          required: true
+          schema:
+            type: integer
+        - name: detailId
+          in: path
+          description: 引合詳細ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                comment:
+                  type: string
+                  title: コメント
+                  example: 'サンプルコメント'
+                inquiryId:
+                  type: integer
+                  title: 引合ID
+                  format: int64
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InquiryDetail'
+    delete:
+      tags:
+        - counting
+      summary: 引合詳細削除
+      description: 指定したIDで引合詳細を削除する
+      parameters:
+        - name: id
+          in: path
+          description: 引合ID
+          required: true
+          schema:
+            type: integer
+        - name: detailId
+          in: path
+          description: 引合詳細ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /invoices:
+    get:
+      tags:
+        - counting
+      summary: 請求一覧
+      description: 請求を一覧で返却する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+    post:
+      tags:
+        - counting
+      summary: 請求登録
+      description: 請求を登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                orderId:
+                  type: integer
+                  title: 注文ID
+                  format: int64
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /invoices/{id}:
+    get:
+      tags:
+        - counting
+      summary: 請求取得
+      description: 指定したIDで請求を取得する
+      parameters:
+        - name: id
+          in: path
+          description: 請求ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+    patch:
+      tags:
+        - counting
+      summary: 請求更新
+      description: 指定したIDで請求を更新する
+      parameters:
+        - name: id
+          in: path
+          description: 請求ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                orderId:
+                  type: integer
+                  title: 注文ID
+                  format: int64
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+    delete:
+      tags:
+        - counting
+      summary: 請求削除
+      description: 指定したIDで請求を削除する
+      parameters:
+        - name: id
+          in: path
+          description: 請求ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /invoices/{id}/detail:
+    get:
+      tags:
+        - counting
+      summary: 請求詳細一覧
+      description: 請求詳細を一覧で返却する
+      parameters:
+        - name: id
+          in: path
+          description: 請求ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceDetail'
+    post:
+      tags:
+        - counting
+      summary: 請求詳細登録
+      description: 請求詳細を登録する
+      parameters:
+        - name: id
+          in: path
+          description: 請求ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプル説明'
+                planedAmount:
+                  type: integer
+                  title: 請求金額（計画）
+                  example: 100000
+                actualAmount:
+                  type: integer
+                  title: 請求金額（実績）
+                  example: 100000
+                planedDate:
+                  type: string
+                  title: 請求日（計画）
+                  format: date
+                actualDate:
+                  type: string
+                  title: 請求日（実績）
+                  format: date
+                invoiceId:
+                  type: integer
+                  title: 請求ID
+                  format: int64
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDetail'
+  /invoices/{id}/detail/{detailId}:
+    get:
+      tags:
+        - counting
+      summary: 請求詳細取得
+      description: 指定したIDで請求詳細を取得する
+      parameters:
+        - name: id
+          in: path
+          description: 請求ID
+          required: true
+          schema:
+            type: integer
+        - name: detailId
+          in: path
+          description: 請求詳細ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDetail'
+    patch:
+      tags:
+        - counting
+      summary: 請求詳細更新
+      description: 指定したIDで請求詳細を更新する
+      parameters:
+        - name: id
+          in: path
+          description: 請求ID
+          required: true
+          schema:
+            type: integer
+        - name: detailId
+          in: path
+          description: 請求詳細ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプル説明'
+                planedAmount:
+                  type: integer
+                  title: 請求金額（計画）
+                  example: 100000
+                actualAmount:
+                  type: integer
+                  title: 請求金額（実績）
+                  example: 100000
+                planedDate:
+                  type: string
+                  title: 請求日（計画）
+                  format: date
+                actualDate:
+                  type: string
+                  title: 請求日（実績）
+                  format: date
+                invoiceId:
+                  type: integer
+                  title: 請求ID
+                  format: int64
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDetail'
+    delete:
+      tags:
+        - counting
+      summary: 請求詳細削除
+      description: 指定したIDで請求詳細を削除する
+      parameters:
+        - name: id
+          in: path
+          description: 請求ID
+          required: true
+          schema:
+            type: integer
+        - name: detailId
+          in: path
+          description: 請求詳細ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /projects:
+    get:
+      tags:
+        - management
+      summary: プロジェクト一覧
+      description: プロジェクトを一覧で返却する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+    post:
+      tags:
+        - management
+      summary: プロジェクト登録
+      description: プロジェクトを登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプル説明'
+                code:
+                  type: string
+                  title: 受注コード
+                  example: 'XXXXXXXXXX'
+                planedPersonMonth:
+                  type: number
+                  title: 工数（計画）
+                  format: float
+                  example: 100000
+                actualPersonMonth:
+                  type: number
+                  title: 工数（実績）
+                  format: float
+                  example: 100000
+                planedStartDate:
+                  type: string
+                  title: 開始日（計画）
+                  format: date
+                actualStartDate:
+                  type: string
+                  title: 開始日（実績）
+                  format: date
+                planedEndDate:
+                  type: string
+                  title: 終了日（計画）
+                  format: date
+                actualEndDate:
+                  type: string
+                  title: 終了日（実績）
+                  format: date
+                orderId:
+                  type: integer
+                  title: 見積ID
+                  format: int64
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+  /projects/{id}:
+    get:
+      tags:
+        - management
+      summary: プロジェクト取得
+      description: 指定したIDでプロジェクトを取得する
+      parameters:
+        - name: id
+          in: path
+          description: プロジェクトID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+    patch:
+      tags:
+        - management
+      summary: プロジェクト更新
+      description: 指定したIDでプロジェクトを更新する
+      parameters:
+        - name: id
+          in: path
+          description: プロジェクトID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title:
+                  type: string
+                  title: 件名
+                  example: 'サンプルプロジェクト'
+                description:
+                  type: string
+                  title: 説明
+                  example: 'サンプル説明'
+                code:
+                  type: string
+                  title: 受注コード
+                  example: 'XXXXXXXXXX'
+                planedPersonMonth:
+                  type: number
+                  title: 工数（計画）
+                  format: float
+                  example: 100000
+                actualPersonMonth:
+                  type: number
+                  title: 工数（実績）
+                  format: float
+                  example: 100000
+                planedStartDate:
+                  type: string
+                  title: 開始日（計画）
+                  format: date
+                actualStartDate:
+                  type: string
+                  title: 開始日（実績）
+                  format: date
+                planedEndDate:
+                  type: string
+                  title: 終了日（計画）
+                  format: date
+                actualEndDate:
+                  type: string
+                  title: 終了日（実績）
+                  format: date
+                orderId:
+                  type: integer
+                  title: 見積ID
+                  format: int64
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+    delete:
+      tags:
+        - management
+      summary: プロジェクト削除
+      description: 指定したIDでプロジェクトを削除する
+      parameters:
+        - name: id
+          in: path
+          description: プロジェクトID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /projects/{id}/assignee:
+    get:
+      tags:
+        - management
+      summary: プロジェクトアサイン一覧
+      description: プロジェクトアサインを一覧で返却する
+      parameters:
+        - name: id
+          in: path
+          description: プロジェクトID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assignee'
+    post:
+      tags:
+        - management
+      summary: プロジェクトアサイン登録
+      description: プロジェクトアサインを登録する
+      parameters:
+        - name: id
+          in: path
+          description: プロジェクトID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                memberId:
+                  type: integer
+                  title: メンバーID
+                  example: 1
+                planedPersonMonth:
+                  type: number
+                  title: 工数（計画）
+                  format: float
+                  example: 100000
+                actualPersonMonth:
+                  type: number
+                  title: 工数（実績）
+                  format: float
+                  example: 100000
+                planedStartDate:
+                  type: string
+                  title: 開始日（計画）
+                  format: date
+                actualStartDate:
+                  type: string
+                  title: 開始日（実績）
+                  format: date
+                planedEndDate:
+                  type: string
+                  title: 終了日（計画）
+                  format: date
+                actualEndDate:
+                  type: string
+                  title: 終了日（実績）
+                  format: date
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignee'
+  /projects/{id}/assignee/{memberId}:
+    get:
+      tags:
+        - management
+      summary: プロジェクトアサイン取得
+      description: 指定したIDでプロジェクトアサインを取得する
+      parameters:
+        - name: id
+          in: path
+          description: プロジェクトID
+          required: true
+          schema:
+            type: integer
+        - name: memberId
+          in: path
+          description: メンバーID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignee'
+    patch:
+      tags:
+        - management
+      summary: プロジェクトアサイン更新
+      description: 指定したIDでプロジェクトアサインを更新する
+      parameters:
+        - name: id
+          in: path
+          description: プロジェクトID
+          required: true
+          schema:
+            type: integer
+        - name: memberId
+          in: path
+          description: メンバーID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                memberId:
+                  type: integer
+                  title: メンバーID
+                  example: 1
+                planedPersonMonth:
+                  type: number
+                  title: 工数（計画）
+                  format: float
+                  example: 100000
+                actualPersonMonth:
+                  type: number
+                  title: 工数（実績）
+                  format: float
+                  example: 100000
+                planedStartDate:
+                  type: string
+                  title: 開始日（計画）
+                  format: date
+                actualStartDate:
+                  type: string
+                  title: 開始日（実績）
+                  format: date
+                planedEndDate:
+                  type: string
+                  title: 終了日（計画）
+                  format: date
+                actualEndDate:
+                  type: string
+                  title: 終了日（実績）
+                  format: date
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignee'
+    delete:
+      tags:
+        - management
+      summary: プロジェクトアサイン削除
+      description: 指定したIDでプロジェクトアサインを削除する
+      parameters:
+        - name: id
+          in: path
+          description: プロジェクトID
+          required: true
+          schema:
+            type: integer
+        - name: memberId
+          in: path
+          description: メンバーID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /customers:
+    get:
+      tags:
+        - management
+      summary: 顧客一覧
+      description: 顧客を一覧で返却する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    post:
+      tags:
+        - management
+      summary: 顧客登録
+      description: 顧客を登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  title: 顧客名
+                  example: '株式会社XXXX'
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /customers/{id}:
+    get:
+      tags:
+        - management
+      summary: 顧客取得
+      description: 指定したIDで顧客を取得する
+      parameters:
+        - name: id
+          in: path
+          description: 顧客ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    patch:
+      tags:
+        - management
+      summary: 顧客更新
+      description: 指定したIDで顧客を更新する
+      parameters:
+        - name: id
+          in: path
+          description: 顧客ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  title: 顧客名
+                  example: '株式会社XXX'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    delete:
+      tags:
+        - management
+      summary: 顧客削除
+      description: 指定したIDで顧客を削除する
+      parameters:
+        - name: id
+          in: path
+          description: 顧客ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /companies:
+    get:
+      tags:
+        - management
+      summary: 企業一覧
+      description: 企業を一覧で返却する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+    post:
+      tags:
+        - management
+      summary: 企業登録
+      description: 企業を登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  title: 企業名
+                  example: '株式会社XXXX'
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+  /companies/{id}:
+    get:
+      tags:
+        - management
+      summary: 企業取得
+      description: 指定したIDで企業を取得する
+      parameters:
+        - name: id
+          in: path
+          description: 企業ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    patch:
+      tags:
+        - management
+      summary: 企業更新
+      description: 指定したIDで企業を更新する
+      parameters:
+        - name: id
+          in: path
+          description: 企業ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  title: 企業名
+                  example: '株式会社XXX'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    delete:
+      tags:
+        - management
+      summary: 企業削除
+      description: 指定したIDで企業を削除する
+      parameters:
+        - name: id
+          in: path
+          description: 企業ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+  /members:
+    get:
+      tags:
+        - management
+      summary: メンバー一覧
+      description: メンバーを一覧で返却する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
+    post:
+      tags:
+        - management
+      summary: メンバー登録
+      description: メンバーを登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  title: メンバー名
+                  example: '株式会社XXXX'
+                companyId:
+                  type: integer
+                  title: 所属企業ID
+                  example: 1
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+  /members/{id}:
+    get:
+      tags:
+        - management
+      summary: メンバー取得
+      description: 指定したIDでメンバーを取得する
+      parameters:
+        - name: id
+          in: path
+          description: メンバーID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+    patch:
+      tags:
+        - management
+      summary: メンバー更新
+      description: 指定したIDでメンバーを更新する
+      parameters:
+        - name: id
+          in: path
+          description: メンバーID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  title: メンバー名
+                  example: '株式会社XXX'
+                companyId:
+                  type: integer
+                  title: 所属企業ID
+                  example: 1
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+    delete:
+      tags:
+        - management
+      summary: メンバー削除
+      description: 指定したIDでメンバーを削除する
+      parameters:
+        - name: id
+          in: path
+          description: メンバーID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除
+components:
+  schemas:
+    User:
+      type: object
+      title: ユーザーオブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: ID
+          description: ユーザーID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        account:
+          type: string
+          title: アカウント
+          example: 'taro.yamada@example.com'
+        name:
+          type: string
+          title: ユーザー名
+          example: 'Taro Yamada'
+        password:
+          type: string
+          title: パスワード
+          format: password
+          example: XXXXXXXXXXX
+    Inquiry:
+      type: object
+      title: 引合オブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        title:
+          type: string
+          title: 件名
+          example: 'サンプルプロジェクト'
+        description:
+          type: string
+          title: 説明
+          example: 'サンプルプロジェクト'
+        customerId:
+          type: integer
+          title: 顧客ID
+          format: int64
+    InquiryDetail:
+      type: object
+      title: 引合詳細オブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        comment:
+          type: string
+          title: コメント
+          example: 'サンプルコメント'
+        inquiryId:
+          type: integer
+          title: 引合ID
+          format: int64
+    Estimate:
+      type: object
+      title: 見積オブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        title:
+          type: string
+          title: 件名
+          example: 'サンプルプロジェクト'
+        description:
+          type: string
+          title: 説明
+          example: 'サンプルプロジェクト'
+        amount:
+          type: integer
+          title: 見積金額
+          example: 100000
+        customerId:
+          type: integer
+          title: 顧客ID
+          format: int64
+        inquiryId:
+          type: integer
+          title: 引合ID
+          format: int64
+    Order:
+      type: object
+      title: 注文オブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: 注文ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        title:
+          type: string
+          title: 件名
+          example: 'サンプルプロジェクト'
+        description:
+          type: string
+          title: 説明
+          example: 'サンプル説明'
+        code:
+          type: string
+          title: 受注コード
+          example: 'XXXXXXXXXX'
+        placingOrderCode:
+          type: string
+          title: 発注コード
+          example: 'XXXXXXXXXX'
+        planedAmount:
+          type: integer
+          title: 受注金額（計画）
+          example: 100000
+        actualAmount:
+          type: integer
+          title: 受注金額（実績）
+          example: 100000
+        planedDate:
+          type: string
+          title: 受注日（計画）
+          format: date
+        actualDate:
+          type: string
+          title: 受注日（実績）
+          format: date
+        estimateId:
+          type: integer
+          title: 見積ID
+          format: int64
+    Invoice:
+      type: object
+      title: 請求オブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: 請求ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        title:
+          type: string
+          title: 件名
+          example: 'サンプルプロジェクト'
+        code:
+          type: string
+          title: 請求コード
+          example: 'XXXXXXXXXX'
+        orderId:
+          type: integer
+          title: 注文ID
+          format: int64
+    InvoiceDetail:
+      type: object
+      title: 請求詳細オブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: 請求詳細ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        description:
+          type: string
+          title: 説明
+          example: 'サンプル説明'
+        planedAmount:
+          type: integer
+          title: 請求金額（計画）
+          example: 100000
+        actualAmount:
+          type: integer
+          title: 請求金額（実績）
+          example: 100000
+        planedDate:
+          type: string
+          title: 請求日（計画）
+          format: date
+        actualDate:
+          type: string
+          title: 請求日（実績）
+          format: date
+        inquiryId:
+          type: integer
+          title: 請求ID
+          format: int64
+          example: 1
+    Project:
+      type: object
+      title: プロジェクトオブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        title:
+          type: string
+          title: 件名
+          example: 'サンプルプロジェクト'
+        description:
+          type: string
+          title: 説明
+          example: 'サンプル説明'
+        code:
+          type: string
+          title: 受注コード
+          example: 'XXXXXXXXXX'
+        planedPersonMonth:
+          type: number
+          title: 工数（計画）
+          format: float
+          example: 100000
+        actualPersonMonth:
+          type: number
+          title: 工数（実績）
+          format: float
+          example: 100000
+        planedStartDate:
+          type: string
+          title: 開始日（計画）
+          format: date
+        actualStartDate:
+          type: string
+          title: 開始日（実績）
+          format: date
+        planedEndDate:
+          type: string
+          title: 終了日（計画）
+          format: date
+        actualEndDate:
+          type: string
+          title: 終了日（実績）
+          format: date
+        orderId:
+          type: integer
+          title: 見積ID
+          format: int64
+    Assignee:
+      type: object
+      title: アサインオブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        memberId:
+          type: integer
+          title: メンバーID
+          example: 1
+        planedPersonMonth:
+          type: number
+          title: 工数（計画）
+          format: float
+          example: 100000
+        actualPersonMonth:
+          type: number
+          title: 工数（実績）
+          format: float
+          example: 100000
+        planedStartDate:
+          type: string
+          title: 開始日（計画）
+          format: date
+        actualStartDate:
+          type: string
+          title: 開始日（実績）
+          format: date
+        planedEndDate:
+          type: string
+          title: 終了日（計画）
+          format: date
+        actualEndDate:
+          type: string
+          title: 終了日（実績）
+          format: date
+        projectId:
+          type: integer
+          title: プロジェクトID
+          format: int64
+    Customer:
+      type: object
+      title: 顧客オブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: ID
+          description: 顧客ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        name:
+          type: string
+          title: 顧客名
+          example: '株式会社XXXX'
+    Company:
+      type: object
+      title: 企業オブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: ID
+          description: 企業ID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        name:
+          type: string
+          title: 企業名
+          example: '株式会社XXXX'
+    Member:
+      type: object
+      title: メンバーオブジェクト
+      properties:
+        id:
+          type: integer
+          format: int64
+          title: ID
+          description: メンバーID
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+          title: 作成日時
+        created:
+          type: string
+          title: 作成者ID
+          example: 1
+        updatedAt:
+          type: string
+          format: date-time
+          title: 更新日時
+        updated:
+          type: string
+          title: 更新者ID
+          example: 1
+        name:
+          type: string
+          title: メンバー名
+          example: 'Taro Yamada'
+        companyId:
+          type: integer
+          title: 企業ID
+          format: int64
+          example: 1
