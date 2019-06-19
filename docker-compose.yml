@@ -1,0 +1,40 @@
+# docker-compose common configuration
+version: '2'
+services:
+  db:
+    # compat with 5.7: https://aws.amazon.com/jp/about-aws/whats-new/2018/02/amazon-aurora-is-compatible-with-mysql-5-7/
+    image: mysql:5.7
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    volumes:
+      - db-volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: user
+
+  web:
+    build: .
+    entrypoint:
+      - "/bin/bash"
+      - "-c"
+      - "scripts/wait-for-it.sh --timeout=60 db:3306; \"$${@}\""
+      - "bash"
+    command:
+      - "python"
+      - "bizmgt/manage.py"
+      - "runserver"
+      - "0.0.0.0:8000"
+    working_dir: "/var/www/bizmgt"
+    volumes:
+      - ./var/www/bizmgt
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  db-volume:
